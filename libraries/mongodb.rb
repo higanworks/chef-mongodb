@@ -74,7 +74,7 @@ class Chef::ResourceDefinitionList::MongoDB
     end
 
     Chef::Log.info(
-      "Configuring replicaset with members #{members.map { |n| n['hostname'] }.join(', ')}"
+      "Configuring replicaset with members #{members.map { |n| n['ipaddress'] }.join(', ')}"
     )
 
     rs_member_ips = []
@@ -82,6 +82,8 @@ class Chef::ResourceDefinitionList::MongoDB
       port = members[n]['mongodb']['config']['port']
       rs_member_ips << { '_id' => n, 'host' => "#{members[n]['ipaddress']}:#{port}" }
     end
+
+    Chef::Log.info(rs_member_ips.to_s)
 
     admin = connection['admin']
     cmd = BSON::OrderedHash.new
